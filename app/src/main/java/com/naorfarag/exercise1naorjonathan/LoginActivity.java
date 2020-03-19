@@ -1,11 +1,14 @@
 package com.naorfarag.exercise1naorjonathan;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -21,12 +24,12 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
+
     private FirebaseAuth mAuth;
     private Button signUpButt;
     private Button loginButt;
     private EditText email;
     private EditText pass;
-    private FirebaseUser currentUser;
     private Context ctx;
 
     @SuppressLint("SourceLockedOrientationActivity")
@@ -41,7 +44,6 @@ public class LoginActivity extends AppCompatActivity {
         pass = findViewById(R.id.passTextLogin);
         signUpButt = findViewById(R.id.signButt);
         loginButt = findViewById(R.id.logButt);
-
         mAuth = FirebaseAuth.getInstance();
 
         setSignUpListener();
@@ -52,13 +54,16 @@ public class LoginActivity extends AppCompatActivity {
         loginButt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isValidInput()) {
+                boolean validEmail, validPassword;
+                validEmail = Validation.isValidEmail(email.getText().toString());
+                validPassword = Validation.isValidPassword(pass.getText().toString());
+                if (validEmail && validPassword) {
                     mAuth.signInWithEmailAndPassword(email.getText().toString(), pass.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
                             Intent intent = new Intent(ctx, DetailsActivity.class);
-                            intent.putExtra("email", email.getText().toString());
-                            intent.putExtra("byReg", false);
+                            intent.putExtra(getString(R.string.intent_email), email.getText().toString());
+                            intent.putExtra(getString(R.string.intent_byReg), false);
                             startActivity(intent);
                             loginButt.setEnabled(false);
                             finish();
@@ -66,19 +71,21 @@ public class LoginActivity extends AppCompatActivity {
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(ctx, "Wrong credentials", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx, R.string.wrong_credentials, Toast.LENGTH_SHORT).show();
                         }
                     });
 
+                } else {
+                    if (!validEmail)
+                        email.setError(getString(R.string.not_valid_email_format));
+                    if (!validPassword)
+                        pass.setError(getString(R.string.not_vailid_password_format));
                 }
             }
         });
 
     }
 
-    private boolean isValidInput() {
-        return email.getText() != null && pass.getText() != null && !pass.getText().toString().isEmpty() && !email.getText().toString().isEmpty();
-    }
 
     private void setSignUpListener() {
         signUpButt.setOnClickListener(new View.OnClickListener() {
@@ -93,11 +100,25 @@ public class LoginActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        currentUser = mAuth.getCurrentUser();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
 
         // Go to details activity
         if (currentUser != null) {
             new Intent(this, DetailsActivity.class);
         }
+    }
+
+    /**
+     * Hide the keyboard with pressing on the screen
+     */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = this.getCurrentFocus();
+        if (imm != null && view != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+        return super.onTouchEvent(event);
+
     }
 }

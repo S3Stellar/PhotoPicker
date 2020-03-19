@@ -8,4 +8,17 @@
     <string name="phone">Phone</string>
     <string name="age">Age</string>
     <string name="registeration_form">Registeration Form</string>
+    <string name="intent_email">email</string>
+    <string name="intent_byReg">byReg</string>
+    <string name="wrong_credentials">Wrong credentials</string>
+    <string name="intent_newUser">NewUser</string>
+    <string name="intent_uri">uri</string>
+
+
+    <!-- Error   -->
+    <string name="not_valid_email_format">Not valid email format</string>
+    <string name="not_vailid_password_format">Password  must be at least 5 letters long</string>
+    <string name="not_valid_phone_format">Enter correct phone number</string>
+    <string name="not_valid_age">Type correct age</string>
+
 </resources>

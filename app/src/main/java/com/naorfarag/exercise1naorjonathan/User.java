@@ -2,6 +2,7 @@ package com.naorfarag.exercise1naorjonathan;
 
 import java.io.Serializable;
 
+@SuppressWarnings("WeakerAccess")
 public class User implements Serializable {
     private String email;
     private String password;

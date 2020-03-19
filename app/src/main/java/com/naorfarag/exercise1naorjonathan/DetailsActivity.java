@@ -45,10 +45,10 @@ public class DetailsActivity extends AppCompatActivity {
         email = findViewById(R.id.emailText);
         phone = findViewById(R.id.phoneText);
         age = findViewById(R.id.ageText);
-        byReg = getIntent().getBooleanExtra("byReg", false);
+        byReg = getIntent().getBooleanExtra(getString(R.string.intent_byReg), false);
         if (byReg) {
-            user = (User) getIntent().getSerializableExtra("NewUser");
-            uri = getIntent().getParcelableExtra("uri");
+            user = (User) getIntent().getSerializableExtra(getString(R.string.intent_newUser));
+            uri = getIntent().getParcelableExtra(getString(R.string.intent_uri));
         }
         loadDetails();
     }

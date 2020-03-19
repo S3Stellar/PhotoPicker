@@ -1,6 +1,7 @@
 package com.naorfarag.exercise1naorjonathan;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -8,7 +9,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,26 +26,20 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class RegActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-    private FirebaseStorage firebaseStorage;
     private StorageReference mStorageRef;
 
 
-    private Bitmap bitmap;
     private Uri selectedImageUri;
     private EditText email;
     private EditText pass;
@@ -59,7 +56,6 @@ public class RegActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-        firebaseStorage = FirebaseStorage.getInstance();
         mStorageRef = FirebaseStorage.getInstance().getReference("images");
 
         email = findViewById(R.id.emailTextReg);
@@ -77,64 +73,56 @@ public class RegActivity extends AppCompatActivity {
         confirmButt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                boolean validEmail, validPass, validPhone, validAge;
                 String emailText = email.getText().toString();
                 String password = pass.getText().toString();
                 String phoneText = phone.getText().toString();
                 int ageText = 0;
 
-                if (emailText.isEmpty()) {
-                    email.setError("Enter correct email");
-                    return;
+                if (!(validEmail = Validation.isValidEmail(emailText))) {
+                    email.setError(getString(R.string.not_valid_email_format));
                 }
 
-                if (password.length() < 5) {
-                    pass.setError("Minimum 5 chars long");
-                    return;
+                if (!(validPass = Validation.isValidPassword(password))) {
+                    pass.setError(getString(R.string.not_vailid_password_format));
                 }
 
-                if (phoneText.isEmpty()) {
-                    phone.setError("Enter correct phone number");
-                    return;
+                if (!(validPhone = Validation.isValidPhone(phoneText))) {
+                    phone.setError(getString(R.string.not_valid_phone_format));
                 }
-
-                try {
+                if (!(validAge = Validation.isValidAge(age.getText().toString()))) {
+                    age.setError(getString(R.string.not_valid_age));
+                } else {
                     ageText = Integer.parseInt(age.getText().toString());
-                } catch (Exception e) {
-                    age.setError("Type correct age");
-                    return;
+                }
+                if (validEmail && validPass && validPhone && validAge) {
+                    Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
+                    User newUser = new User(emailText, password, phoneText, ageText);
+                    intent.putExtra(getString(R.string.intent_newUser), newUser);
+                    intent.putExtra(getString(R.string.intent_byReg), true);
+
+                    // Save to storage
+                    if (selectedImageUri != null) {
+                        uploadFile();
+                        intent.putExtra(getString(R.string.intent_uri), selectedImageUri);
+                    }
+
+                    // Save to FireStore
+                    db.collection("users").document(emailText).set(newUser);
+
+                    // Save to authentication
+                    createAccount(emailText, password);
+
+                    // Go Details Activity
+                    startActivity(intent);
+                    finish();
                 }
 
-                Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
-                User newUser = new User(emailText, password, phoneText, ageText);
-                intent.putExtra("NewUser", newUser);
-                intent.putExtra("byReg", true);
-
-
-                // Save to storage
-                if (selectedImageUri != null) {
-                    uploadFile();
-                    intent.putExtra("uri", selectedImageUri);
-                }
-
-                // Save to FireStore
-                db.collection("users").document(emailText).set(newUser);
-
-                // Save to authentication
-                createAccount(emailText, password);
-
-                // Go Details Activity
-                startActivity(intent);
-                finish();
             }
         });
     }
-    public static boolean isValidEmail(String emailStr) {
-        final Pattern VALID_EMAIL_ADDRESS_REGEX =
-                Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
-        return matcher.matches() && emailStr.trim().length() != 0;
-    }
+
+
     private void uploadFile() {
 
         mStorageRef.child(email.getText().toString()).putFile(selectedImageUri)
@@ -146,7 +134,7 @@ public class RegActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
-
+                        Log.d("TAG", "uploadFile(): failed to upload the file to storage.");
                     }
                 });
     }
@@ -169,7 +157,6 @@ public class RegActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("TAG", "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("TAG", "createUserWithEmail:failure", task.getException());
@@ -216,7 +203,7 @@ public class RegActivity extends AppCompatActivity {
 
             try {
                 // Setting image on image view using Bitmap
-                bitmap = MediaStore
+                Bitmap bitmap = MediaStore
                         .Images
                         .Media
                         .getBitmap(
@@ -232,41 +219,19 @@ public class RegActivity extends AppCompatActivity {
         }
     }
 
-  /*  @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1001) {
-            Bitmap bitmap;
-            if (data != null)
-                selectedImage = data.getData();
-
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-            Cursor cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
-            cursor.moveToFirst();
-
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            cursor.close();
-
-            bitmap = BitmapFactory.decodeFile(picturePath);
-
-            if (bitmap != null) {
-                userImage = findViewById(R.id.profileImage);
-                userImage.setImageBitmap(bitmap);
-            }
+    /**
+     * Hide the keyboard with pressing on the screen
+     */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = this.getCurrentFocus();
+        if (imm != null && view != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
-    }*/
+        return super.onTouchEvent(event);
 
-      /*  public void pickImage() {
+    }
 
-          Intent intent = new Intent();
-          intent.setType("image/*");
-          intent.setAction(Intent.ACTION_GET_CONTENT);
-          startActivityForResult(Intent.createChooser(intent, "Select Picture"),
-                  11);
-
-      }*/
 
 }
