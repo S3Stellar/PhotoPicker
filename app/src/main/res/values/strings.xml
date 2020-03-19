@@ -20,5 +20,6 @@
     <string name="not_vailid_password_format">Password  must be at least 5 letters long</string>
     <string name="not_valid_phone_format">Enter correct phone number</string>
     <string name="not_valid_age">Type correct age</string>
+    <string name="sign_out">SIGN OUT</string>
 
 </resources>

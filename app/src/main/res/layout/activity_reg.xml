@@ -69,7 +69,6 @@
                     android:ems="10"
                     android:hint="@string/age"
                     android:inputType="number" />
-                <!-- android:drawableEnd="@drawable/ic_error_black_24dp"-->
 
                 <ImageView
                     android:id="@+id/userImageReg"
@@ -86,12 +85,12 @@
                     android:layout_margin="20dp"
                     android:text="@string/confirm" />
 
-                <ProgressBar
+                <!--<ProgressBar
                     android:id="@+id/progressBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:visibility="gone"/>
+                    android:visibility="gone"/>-->
 
             </LinearLayout>
         </RelativeLayout>
