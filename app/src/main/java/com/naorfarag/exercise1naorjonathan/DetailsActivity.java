@@ -5,12 +5,19 @@ import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -31,7 +38,7 @@ public class DetailsActivity extends AppCompatActivity {
     private boolean byReg = false;
 
     private User user;
-
+    private ProgressBar progressBar;
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -40,7 +47,7 @@ public class DetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_details);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         db = FirebaseFirestore.getInstance();
-
+        progressBar = findViewById(R.id.imageProgressBar);
         userImage = findViewById(R.id.profileImage);
         email = findViewById(R.id.emailText);
         phone = findViewById(R.id.phoneText);
@@ -57,13 +64,16 @@ public class DetailsActivity extends AppCompatActivity {
         if (byReg) {
             loadFromIntentObject();
         } else {
+            progressBar.setVisibility(View.VISIBLE);
             loadFromDatabase();
 
         }
     }
+
     // TODO: 19/03/2020  FIX Load image from database when doing login
     private void loadFromDatabase() {
         String mail = getIntent().getStringExtra("email");
+
 
         if (mail != null) {
             email.setText(mail);
@@ -81,17 +91,22 @@ public class DetailsActivity extends AppCompatActivity {
                 }
             });
 
-            mStorageRef.child(email.getText().toString()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            mStorageRef.child(email.getText().toString()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
-                public void onSuccess(Uri uri) {
-                    Log.i("TAG", "before uri if ");
-                    if (uri != null) {
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        uri = task.getResult();
+                        Glide.with(getApplicationContext())
+                                .load(uri)
+                                .into(userImage);
                         userImage.setImageURI(uri);
-                        Log.i("TAG", "onSuccess: " + uri.toString());
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
-                    else {
-                        userImage.setBackgroundResource(R.drawable.cyclops);
-                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    userImage.setBackgroundResource(R.drawable.cyclops);
                 }
             });
         }

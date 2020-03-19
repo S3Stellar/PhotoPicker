@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "196579593287-dgac9rd4acqjq8sornahirs3q0h83159.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.naorfarag.exercise1naorjonathan",
+            "certificate_hash": "b95b76ed801e22fc19d2b40e098fcc7af9ab3ec2"
+          }
+        },
+        {
           "client_id": "196579593287-iav71sh2tlqm6keneg9638c4tp17sc1p.apps.googleusercontent.com",
           "client_type": 3
         }

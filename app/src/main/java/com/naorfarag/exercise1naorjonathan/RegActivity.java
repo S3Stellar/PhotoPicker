@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,8 +31,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
 import java.io.IOException;
+
 
 public class RegActivity extends AppCompatActivity {
 
@@ -47,6 +48,8 @@ public class RegActivity extends AppCompatActivity {
     private EditText age;
     private ImageView userImage;
     private Button confirmButt;
+    private Intent intent;
+    private ProgressBar progressBar;
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -64,7 +67,7 @@ public class RegActivity extends AppCompatActivity {
         age = findViewById(R.id.ageTextReg);
         userImage = findViewById(R.id.userImageReg);
         confirmButt = findViewById(R.id.confirm);
-
+        progressBar = findViewById(R.id.progressBar);
         confirmListener();
         imageChooseListener();
     }
@@ -96,7 +99,8 @@ public class RegActivity extends AppCompatActivity {
                     ageText = Integer.parseInt(age.getText().toString());
                 }
                 if (validEmail && validPass && validPhone && validAge) {
-                    Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
+                    progressBar.setVisibility(View.VISIBLE);
+                    intent = new Intent(getApplicationContext(), DetailsActivity.class);
                     User newUser = new User(emailText, password, phoneText, ageText);
                     intent.putExtra(getString(R.string.intent_newUser), newUser);
                     intent.putExtra(getString(R.string.intent_byReg), true);
@@ -113,9 +117,7 @@ public class RegActivity extends AppCompatActivity {
                     // Save to authentication
                     createAccount(emailText, password);
 
-                    // Go Details Activity
-                    startActivity(intent);
-                    finish();
+
                 }
 
             }
@@ -123,8 +125,7 @@ public class RegActivity extends AppCompatActivity {
     }
 
 
-    private void uploadFile() {
-
+    private void uploadFile()  {
         mStorageRef.child(email.getText().toString()).putFile(selectedImageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -157,9 +158,14 @@ public class RegActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("TAG", "createUserWithEmail:success");
+                            // Go Details Activity
+                            startActivity(intent);
+                            progressBar.setVisibility(View.INVISIBLE);
+                            finish();
+
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w("TAG", "createUserWithEmail:failure", task.getException());
+                            Log.d("TAG", "createUserWithEmail:failure", task.getException());
                             Toast.makeText(RegActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -179,45 +185,29 @@ public class RegActivity extends AppCompatActivity {
     }
 
     // Override onActivityResult method
+    // Override onActivityResult method
     @Override
-    protected void onActivityResult(int requestCode,
-                                    int resultCode,
-                                    Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        super.onActivityResult(requestCode,
-                resultCode,
-                data);
-
-        // checking request code and result code
-        // if request code is PICK_IMAGE_REQUEST and
-        // resultCode is RESULT_OK
-        // then set image in the image view
-        if (requestCode == 11
-                && resultCode == RESULT_OK
-                && data != null
-                && data.getData() != null) {
-
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 11 && resultCode == RESULT_OK && data != null && data.getData() != null) {
             // Get the Uri of data
             selectedImageUri = data.getData();
 
 
             try {
-                // Setting image on image view using Bitmap
                 Bitmap bitmap = MediaStore
                         .Images
                         .Media
-                        .getBitmap(
-                                getContentResolver(),
-                                selectedImageUri);
-
+                        .getBitmap(getContentResolver(), selectedImageUri);
                 userImage.setImageBitmap(bitmap);
-                //((ImageView) findViewById(R.id.profileImage)).setImageBitmap(bitmap);
             } catch (IOException e) {
                 // Log the exception
                 e.printStackTrace();
             }
         }
     }
+
 
     /**
      * Hide the keyboard with pressing on the screen
@@ -230,7 +220,6 @@ public class RegActivity extends AppCompatActivity {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
         return super.onTouchEvent(event);
-
     }
 
 

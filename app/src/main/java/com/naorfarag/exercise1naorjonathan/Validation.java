@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 @SuppressWarnings("WeakerAccess")
 public final class Validation {
-    public final static int VALID_PASS_LENGTH = 4;
+    public final static int VALID_PASS_LENGTH = 5;
 
     public static boolean isValidEmail(String emailStr) {
         final Pattern VALID_EMAIL_ADDRESS_REGEX =
