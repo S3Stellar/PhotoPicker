@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "196579593287",
+    "firebase_url": "https://exercise1naorjonathan.firebaseio.com",
+    "project_id": "exercise1naorjonathan",
+    "storage_bucket": "exercise1naorjonathan.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:196579593287:android:4a4dd4f3241b9033327562",
+        "android_client_info": {
+          "package_name": "com.naorfarag.exercise1naorjonathan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "196579593287-iav71sh2tlqm6keneg9638c4tp17sc1p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKn3egz7Ghtg4NgM1kihzRs1vgnwI5Uwc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "196579593287-iav71sh2tlqm6keneg9638c4tp17sc1p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

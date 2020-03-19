@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+
+    tools:context=".RegActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="80dp"
+                android:layout_marginStart="10dp"
+                android:text="@string/registeration_form"
+                android:textSize="20sp"
+                />
+
+            <EditText
+                android:id="@+id/emailTextReg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:ems="10"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+               />
+
+            <EditText
+                android:id="@+id/passTextReg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:ems="10"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                />
+
+
+            <EditText
+                android:id="@+id/phoneTextReg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:ems="10"
+                android:hint="@string/phone"
+                android:inputType="phone"
+                />
+
+            <EditText
+                android:id="@+id/ageTextReg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:ems="10"
+                android:hint="@string/age"
+                android:inputType="number"
+                />
+           <!-- android:drawableEnd="@drawable/ic_error_black_24dp"-->
+
+            <ImageView
+                android:id="@+id/userImageReg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/picture"
+                android:layout_gravity="center"/>
+
+            <Button
+                android:id="@+id/confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:text="@string/confirm"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Exercise1NaorJonathan</string>
+    <string name="signup">Signup</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm">Confirm</string>
+    <string name="phone">Phone</string>
+    <string name="age">Age</string>
+    <string name="registeration_form">Registeration Form</string>
+</resources>
