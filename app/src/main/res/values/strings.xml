@@ -7,7 +7,7 @@
     <string name="confirm">Confirm</string>
     <string name="phone">Phone</string>
     <string name="age">Age</string>
-    <string name="registeration_form">Registeration Form</string>
+    <string name="registration_form">Registration Form</string>
     <string name="intent_email">email</string>
     <string name="intent_byReg">byReg</string>
     <string name="wrong_credentials">Wrong credentials</string>
@@ -17,7 +17,7 @@
 
     <!-- Error   -->
     <string name="not_valid_email_format">Not valid email format</string>
-    <string name="not_vailid_password_format">Password  must be at least 5 letters long</string>
+    <string name="not_valid_password_format">Password  must be at least 6 letters long</string>
     <string name="not_valid_phone_format">Enter correct phone number</string>
     <string name="not_valid_age">Type correct age</string>
     <string name="sign_out">SIGN OUT</string>

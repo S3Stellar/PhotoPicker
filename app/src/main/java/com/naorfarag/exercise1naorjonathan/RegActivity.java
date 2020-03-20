@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -83,7 +82,7 @@ public class RegActivity extends AppCompatActivity {
         confirmButt.setOnClickListener(v -> {
             confirmButt.setEnabled(false);
             boolean validEmail, validPass, validPhone, validAge;
-            String emailText = email.getText().toString();
+            String emailText = email.getText().toString().toLowerCase();
             String password = pass.getText().toString();
             String phoneText = phone.getText().toString();
             int ageText = 0;
@@ -93,7 +92,7 @@ public class RegActivity extends AppCompatActivity {
             }
 
             if (!(validPass = Validation.isValidPassword(password))) {
-                pass.setError(getString(R.string.not_vailid_password_format));
+                pass.setError(getString(R.string.not_valid_password_format));
             }
 
             if (!(validPhone = Validation.isValidPhone(phoneText))) {
@@ -135,7 +134,7 @@ public class RegActivity extends AppCompatActivity {
 
     private void uploadFile() {
         if (selectedImageUri != null) {
-            mStorageRef.child(email.getText().toString()).putFile(selectedImageUri)
+            mStorageRef.child(email.getText().toString().toLowerCase()).putFile(selectedImageUri)
                     .addOnCompleteListener(taskSnapshot -> {
                         hidePDialog();
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -167,8 +166,10 @@ public class RegActivity extends AppCompatActivity {
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.d("TAG", "createUserWithEmail:failure", task.getException());
-                        Toast.makeText(RegActivity.this, "Authentication failed.",
+                        Toast.makeText(RegActivity.this, "Email already in use.",
                                 Toast.LENGTH_SHORT).show();
+                        hidePDialog();
+                        confirmButt.setEnabled(true);
                     }
                 });
     }

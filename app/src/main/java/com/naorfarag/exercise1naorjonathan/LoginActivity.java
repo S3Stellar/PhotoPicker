@@ -54,19 +54,22 @@ public class LoginActivity extends AppCompatActivity {
             validEmail = Validation.isValidEmail(email.getText().toString());
             validPassword = Validation.isValidPassword(pass.getText().toString());
             if (validEmail && validPassword) {
-                mAuth.signInWithEmailAndPassword(email.getText().toString(), pass.getText().toString()).addOnSuccessListener(authResult -> {
+                mAuth.signInWithEmailAndPassword(email.getText().toString().toLowerCase(), pass.getText().toString()).addOnSuccessListener(authResult -> {
                     Intent intent = new Intent(ctx, DetailsActivity.class);
-                    intent.putExtra(getString(R.string.intent_email), email.getText().toString());
+                    intent.putExtra(getString(R.string.intent_email), email.getText().toString().toLowerCase());
                     intent.putExtra(getString(R.string.intent_byReg), false);
                     finish();
                     startActivity(intent);
-                }).addOnFailureListener(e -> Toast.makeText(ctx, R.string.wrong_credentials, Toast.LENGTH_SHORT).show());
+                }).addOnFailureListener(e -> {
+                    Toast.makeText(ctx, R.string.wrong_credentials, Toast.LENGTH_SHORT).show();
+                    loginButt.setEnabled(true);
+                });
 
             } else {
                 if (!validEmail)
                     email.setError(getString(R.string.not_valid_email_format));
                 if (!validPassword)
-                    pass.setError(getString(R.string.not_vailid_password_format));
+                    pass.setError(getString(R.string.not_valid_password_format));
                 loginButt.setEnabled(true);
             }
         });

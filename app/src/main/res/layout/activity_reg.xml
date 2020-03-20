@@ -30,7 +30,7 @@
                     android:layout_marginStart="10dp"
                     android:textColor="@color/colorAccent"
                     android:textStyle="bold"
-                    android:text="@string/registeration_form"
+                    android:text="@string/registration_form"
                     android:textSize="20sp" />
 
                 <EditText

@@ -11,3 +11,11 @@ x
 Happ/src/main/java/com/naorfarag/exercise1naorjonathan/LoginActivity.java,d\3\d334108f657a7a7bd5503f0109ee6c0aae1865ef
 z
 Japp/src/main/java/com/naorfarag/exercise1naorjonathan/DetailsActivity.java,0\8\08e715e3657fc5a4c73343db3f84c06360cd879a
+S
+#.idea/sonarlint/issuestore/index.pb,9\f\9fe84ebb15faf917b7def6236dba604453cc61e0
+u
+Eapp/src/main/java/com/naorfarag/exercise1naorjonathan/Validation.java,d\6\d640475671af0f2beb6da52ec3110d008916b1c5
+X
+(app/src/main/res/layout/activity_reg.xml,6\5\654d5ae4994d7cecd4acb465074443350eacd809
+N
+app/src/main/res/xml/paths.xml,e\2\e2db2c4105b4d786e4ce82a040871e895f681f50
