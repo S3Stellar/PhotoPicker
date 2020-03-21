@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -24,7 +25,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class DetailsActivity extends AppCompatActivity {
 
-    private StorageReference mStorageRef = FirebaseStorage.getInstance().getReference("images");
+    private StorageReference mStorageRef;
     private FirebaseFirestore db;
 
     private Uri uri;
@@ -44,6 +45,7 @@ public class DetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_details);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         db = FirebaseFirestore.getInstance();
+        mStorageRef = FirebaseStorage.getInstance().getReference(getString(R.string.user_images));
         progressBar = findViewById(R.id.imageProgressBar);
         userImage = findViewById(R.id.profileImage);
         email = findViewById(R.id.emailText);
@@ -89,13 +91,11 @@ public class DetailsActivity extends AppCompatActivity {
                 }
             });
 
-            mStorageRef.child(email.getText().toString()).getDownloadUrl().addOnCompleteListener(task -> {
-                if (task.isSuccessful() && task.getResult() != null) {
-                    uri = task.getResult();
-                    Glide.with(getApplicationContext())
-                            .load(uri)
-                            .into(userImage);
-                }
+            mStorageRef.child(email.getText().toString()).getDownloadUrl().addOnSuccessListener(successUri -> {
+                uri = successUri;
+                Glide.with(getApplicationContext())
+                        .load(uri)
+                        .into(userImage);
                 progressBar.setVisibility(View.INVISIBLE);
             }).addOnFailureListener(e -> {
                 userImage.setBackgroundResource(R.drawable.cyclops);

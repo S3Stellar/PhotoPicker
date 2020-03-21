@@ -14,6 +14,7 @@ import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -65,7 +66,7 @@ public class RegActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-        mStorageRef = FirebaseStorage.getInstance().getReference("images");
+        mStorageRef = FirebaseStorage.getInstance().getReference(getString(R.string.user_images));
 
         email = findViewById(R.id.emailTextReg);
         pass = findViewById(R.id.passTextReg);
@@ -195,11 +196,17 @@ public class RegActivity extends AppCompatActivity {
         if (requestCode == 11 && resultCode == RESULT_OK && data != null && data.getData() != null) {
             // Get the Uri of data
             selectedImageUri = data.getData();
-
+            Bitmap bitmap;
             try {
-                ImageDecoder.Source source = ImageDecoder.createSource(this.getContentResolver(), selectedImageUri);
-                Bitmap bitmap = ImageDecoder.decodeBitmap(source);
-                userImage.setImageBitmap(bitmap);
+                if (Build.VERSION.SDK_INT < 28) {
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
+                    userImage.setImageBitmap(bitmap);
+                } else {
+                    ImageDecoder.Source source = ImageDecoder.createSource(this.getContentResolver(), selectedImageUri);
+                    bitmap = ImageDecoder.decodeBitmap(source);
+                    userImage.setImageBitmap(bitmap);
+                }
+
             } catch (IOException e) {
                 // Log the exception
                 e.printStackTrace();
@@ -220,7 +227,6 @@ public class RegActivity extends AppCompatActivity {
                         Manifest.permission.READ_EXTERNAL_STORAGE)) {
                     showDialog("External storage", context,
                             Manifest.permission.READ_EXTERNAL_STORAGE);
-
                 } else {
                     ActivityCompat
                             .requestPermissions(
@@ -253,20 +259,17 @@ public class RegActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // do your stuff
-                } else {
-                    Toast.makeText(this, "GET_ACCOUNTS Denied",
-                            Toast.LENGTH_SHORT).show();
-                }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions,
-                        grantResults);
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // do your stuff
+            } else {
+                Toast.makeText(this, "GET_ACCOUNTS Denied",
+                        Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions,
+                    grantResults);
         }
     }
 
@@ -297,9 +300,7 @@ public class RegActivity extends AppCompatActivity {
         pDialog.showCancelButton(true);
         pDialog.setCanceledOnTouchOutside(false);
         pDialog.setCancelText("Cancel");
-        pDialog.setCancelClickListener(sDialog -> {
-            hidePDialog();
-        });
+        pDialog.setCancelClickListener(sDialog -> hidePDialog());
         pDialog.show();
         pDialog.getButton(SweetAlertDialog.BUTTON_CANCEL).setHeight(85);
         pDialog.getButton(SweetAlertDialog.BUTTON_CANCEL).setLayoutParams(btnParams);

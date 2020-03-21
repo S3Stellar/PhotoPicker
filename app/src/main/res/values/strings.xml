@@ -21,5 +21,6 @@
     <string name="not_valid_phone_format">Enter correct phone number</string>
     <string name="not_valid_age">Type correct age</string>
     <string name="sign_out">SIGN OUT</string>
+    <string name="user_images">userImages</string>
 
 </resources>
