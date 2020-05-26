@@ -1,4 +1,4 @@
-package com.naorfarag.exercise1naorjonathan;
+package com.naorfarag.exercise1naorjonathan.LoginRegister;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -18,6 +18,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.naorfarag.exercise1naorjonathan.R;
+import com.naorfarag.exercise1naorjonathan.Search.SearchActivity;
+import com.naorfarag.exercise1naorjonathan.Validation;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -55,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
             validPassword = Validation.isValidPassword(pass.getText().toString());
             if (validEmail && validPassword) {
                 mAuth.signInWithEmailAndPassword(email.getText().toString().toLowerCase(), pass.getText().toString()).addOnSuccessListener(authResult -> {
-                    Intent intent = new Intent(ctx, DetailsActivity.class);
+                    Intent intent = new Intent(ctx, SearchActivity.class);
                     intent.putExtra(getString(R.string.intent_email), email.getText().toString().toLowerCase());
                     intent.putExtra(getString(R.string.intent_byReg), false);
                     finish();
@@ -95,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
         if (currentUser != null) {
             Log.d("TAG", "onStart: Starting DetailsAct");
             finish();
-            startActivity(new Intent(this, DetailsActivity.class).putExtra("email", currentUser.getEmail()).
+            startActivity(new Intent(this, SearchActivity.class).putExtra("email", currentUser.getEmail()).
                     putExtra(getString(R.string.intent_byReg), false));
         }
     }

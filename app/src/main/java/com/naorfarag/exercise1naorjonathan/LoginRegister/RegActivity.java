@@ -1,4 +1,4 @@
-package com.naorfarag.exercise1naorjonathan;
+package com.naorfarag.exercise1naorjonathan.LoginRegister;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -34,6 +34,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.naorfarag.exercise1naorjonathan.R;
+import com.naorfarag.exercise1naorjonathan.Search.SearchActivity;
+import com.naorfarag.exercise1naorjonathan.Validation;
 
 import java.io.IOException;
 
@@ -109,7 +112,7 @@ public class RegActivity extends AppCompatActivity {
 
                 User newUser = new User(emailText, password, phoneText, ageText);
 
-                intent = new Intent(this, DetailsActivity.class);
+                intent = new Intent(this, SearchActivity.class);
                 intent.putExtra(getString(R.string.intent_newUser), newUser);
                 intent.putExtra(getString(R.string.intent_byReg), true);
 
