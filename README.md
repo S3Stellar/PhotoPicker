@@ -1,3 +1,3 @@
-# LoginSignup
+# Photo garden
 
-Simple android app demonstrating flow between login-signup-profile activities
+Showing photos to your liking
