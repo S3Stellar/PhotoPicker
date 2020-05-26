@@ -36,7 +36,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.naorfarag.exercise1naorjonathan.R;
 import com.naorfarag.exercise1naorjonathan.Search.SearchActivity;
-import com.naorfarag.exercise1naorjonathan.Validation;
+import com.naorfarag.exercise1naorjonathan.utility.Validation;
 
 import java.io.IOException;
 
@@ -222,7 +222,7 @@ public class RegActivity extends AppCompatActivity {
     public boolean checkPermissionREAD_EXTERNAL_STORAGE(
             final Context context) {
         int currentAPIVersion = Build.VERSION.SDK_INT;
-        if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
+        if (currentAPIVersion >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(context,
                     Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(

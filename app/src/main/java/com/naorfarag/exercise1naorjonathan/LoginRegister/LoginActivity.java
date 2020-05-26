@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.naorfarag.exercise1naorjonathan.R;
 import com.naorfarag.exercise1naorjonathan.Search.SearchActivity;
-import com.naorfarag.exercise1naorjonathan.Validation;
+import com.naorfarag.exercise1naorjonathan.utility.Validation;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -114,6 +114,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onResume();
         signUpButt.setEnabled(true);
     }
+
+
 
     /**
      * Hide the keyboard with pressing on the screen

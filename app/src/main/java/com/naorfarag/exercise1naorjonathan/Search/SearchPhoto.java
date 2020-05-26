@@ -3,7 +3,6 @@ package com.naorfarag.exercise1naorjonathan.Search;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +10,9 @@ import android.widget.EditText;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kc.unsplash.Unsplash;
-import com.kc.unsplash.api.Order;
 import com.kc.unsplash.api.Orientation;
 import com.kc.unsplash.models.Photo;
 import com.kc.unsplash.models.SearchResults;
@@ -23,17 +20,17 @@ import com.naorfarag.exercise1naorjonathan.R;
 
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class SearchPhoto extends Fragment {
-
+public class SearchPhoto extends Fragment implements PhotoRecyclerAdapter.OnImageClickListener {
+    private static final int PAGE_SIZE = 10;
+    private static int pageNumber;
+    private String searchContent;
     private EditText searchBar;
     private RecyclerView recyclerView;
     private PhotoRecyclerAdapter adapter;
-
+    private List<Photo> photoList;
     public SearchPhoto() { }
 
     @Override
@@ -45,41 +42,71 @@ public class SearchPhoto extends Fragment {
         recyclerView = view.findViewById(R.id.recycleView);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
-        adapter = new PhotoRecyclerAdapter();
+        adapter = new PhotoRecyclerAdapter(this);
         recyclerView.setAdapter(adapter);
 
+
+//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                if (!recyclerView.canScrollVertically(1)) {
+//                        searchPhoto(searchContent, pageNumber++);
+//                }
+//            }
+//        });
         searchBar = view.findViewById(R.id.searchBar);
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                pageNumber = 0;
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
-                searchPhoto(s.toString());
+                searchContent = s.toString();
+                searchPhoto(searchContent,pageNumber);
             }
         });
 
         return view;
     }
-    private void searchPhoto(String searchBy){
-        Unsplash unsplash = new Unsplash("9xebvc9XEro15Zr2OyE9H1J80O-YS-B7l6RhSiZbzkc");
+    private void searchPhoto(String searchBy,int pageNumber){
+        Unsplash unsplash = new Unsplash(getString(R.string.client_id));
 
-        unsplash.searchPhotos(searchBy,0,10, Orientation.PORTRAIT.getOrientation(), new Unsplash.OnSearchCompleteListener() {
+        unsplash.searchPhotos(searchBy,pageNumber,PAGE_SIZE, Orientation.PORTRAIT.getOrientation(), new Unsplash.OnSearchCompleteListener() {
 
             @Override
             public void onComplete(SearchResults results) {
-                Log.d("Photos", "Total Results Found " + results.getTotal());
-                List<Photo> photos = results.getResults();
-                adapter.setPhotos(photos);
+                photoList = results.getResults();
+                adapter.setPhotos(photoList);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onError(String error) {
-                Log.d("Unsplash", error);
+                sweetAlertDialog("Unsplash Error", error);
             }
         });
+    }
+
+    @Override
+    public void onImageClick(int position) {
+        DetailsPhoto detailsPhotoFragment = new DetailsPhoto(photoList.get(position));
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainer,detailsPhotoFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void sweetAlertDialog(String title, String description){
+        new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE)
+                .setTitleText("Oops...")
+                .setContentText(String.format("%s",title + " " + description))
+                .show();
     }
 }

@@ -18,16 +18,17 @@ import java.util.List;
 public class PhotoRecyclerAdapter extends RecyclerView.Adapter<PhotoRecyclerAdapter.ViewHolder> {
 
     private List<Photo> photos;
-
-    public PhotoRecyclerAdapter() {
+    private OnImageClickListener onImageClickListener;
+    public PhotoRecyclerAdapter(OnImageClickListener onImageClickListener) {
         photos = new ArrayList<>();
+        this.onImageClickListener = onImageClickListener;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_photo, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, onImageClickListener);
     }
 
     @Override
@@ -47,14 +48,26 @@ public class PhotoRecyclerAdapter extends RecyclerView.Adapter<PhotoRecyclerAdap
         return photos.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder  {
 
         public final ImageView imageView;
-
-        public ViewHolder(View view) {
+        public ViewHolder(View view, OnImageClickListener onImageClickListener) {
             super(view);
             imageView = view.findViewById(R.id.imageView);
+
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(onImageClickListener != null){
+                        onImageClickListener.onImageClick(getAdapterPosition());
+                    }
+                }
+            });
         }
 
+    }
+
+    public interface OnImageClickListener {
+        void onImageClick(int position);
     }
 }
