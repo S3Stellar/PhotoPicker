@@ -1,8 +1,9 @@
-package com.naorfarag.exercise1naorjonathan.Search;
+package com.naorfarag.exercise1naorjonathan.search;
 
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.kc.unsplash.models.Photo;
 import com.kc.unsplash.models.SearchResults;
 import com.naorfarag.exercise1naorjonathan.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -30,8 +32,11 @@ public class SearchPhoto extends Fragment implements PhotoRecyclerAdapter.OnImag
     private EditText searchBar;
     private RecyclerView recyclerView;
     private PhotoRecyclerAdapter adapter;
-    private List<Photo> photoList;
-    public SearchPhoto() { }
+    private List<Photo> photoList = new ArrayList<>();
+    private static String lastSearchContent;
+
+    public SearchPhoto() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,15 +51,17 @@ public class SearchPhoto extends Fragment implements PhotoRecyclerAdapter.OnImag
         recyclerView.setAdapter(adapter);
 
 
-//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//                if (!recyclerView.canScrollVertically(1)) {
-//                        searchPhoto(searchContent, pageNumber++);
-//                }
-//            }
-//        });
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (!recyclerView.canScrollVertically(1)) {
+                        Log.i("SCROLL", "PAGE NUM = " + pageNumber);
+                        searchPhoto(lastSearchContent, ++pageNumber);
+                }
+            }
+        });
+
         searchBar = view.findViewById(R.id.searchBar);
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
@@ -62,28 +69,37 @@ public class SearchPhoto extends Fragment implements PhotoRecyclerAdapter.OnImag
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                pageNumber = 0;
+               // pageNumber = 0;
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                pageNumber = 0;
                 searchContent = s.toString();
-                searchPhoto(searchContent,pageNumber);
+                searchPhoto(searchContent, pageNumber);
             }
         });
 
         return view;
     }
-    private void searchPhoto(String searchBy,int pageNumber){
+    private void searchPhoto(String searchBy, int pageNumber){
         Unsplash unsplash = new Unsplash(getString(R.string.client_id));
-
-        unsplash.searchPhotos(searchBy,pageNumber,PAGE_SIZE, Orientation.PORTRAIT.getOrientation(), new Unsplash.OnSearchCompleteListener() {
-
+        Log.i("SEARCH", "SEARCH="+searchBy);
+        unsplash.searchPhotos(searchBy, pageNumber, PAGE_SIZE, Orientation.PORTRAIT.getOrientation(), new Unsplash.OnSearchCompleteListener() {
             @Override
             public void onComplete(SearchResults results) {
-                photoList = results.getResults();
-                adapter.setPhotos(photoList);
-                adapter.notifyDataSetChanged();
+                Log.i("SEARCH", "IN SEARCH");
+                Log.i("SEARCH", "PAGE NUM = " + pageNumber);
+               // SearchPhoto.pageNumber++;
+                if(results != null) {
+                    if(!searchBy.equalsIgnoreCase(lastSearchContent)) {
+                        photoList.clear();
+                        lastSearchContent = searchBy;
+                    }
+
+                    photoList.addAll(results.getResults());
+                    adapter.setPhotos(photoList);
+                }
             }
 
             @Override
@@ -98,7 +114,7 @@ public class SearchPhoto extends Fragment implements PhotoRecyclerAdapter.OnImag
         DetailsPhoto detailsPhotoFragment = new DetailsPhoto(photoList.get(position));
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragmentContainer,detailsPhotoFragment)
+                .replace(R.id.fragmentContainer, detailsPhotoFragment,"PHOTO")
                 .addToBackStack(null)
                 .commit();
     }

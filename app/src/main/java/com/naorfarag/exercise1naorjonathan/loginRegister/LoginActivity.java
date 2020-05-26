@@ -1,4 +1,4 @@
-package com.naorfarag.exercise1naorjonathan.LoginRegister;
+package com.naorfarag.exercise1naorjonathan.loginRegister;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -19,7 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.naorfarag.exercise1naorjonathan.R;
-import com.naorfarag.exercise1naorjonathan.Search.SearchActivity;
+import com.naorfarag.exercise1naorjonathan.search.SearchActivity;
 import com.naorfarag.exercise1naorjonathan.utility.Validation;
 
 public class LoginActivity extends AppCompatActivity {

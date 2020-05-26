@@ -1,4 +1,4 @@
-package com.naorfarag.exercise1naorjonathan.LoginRegister;
+package com.naorfarag.exercise1naorjonathan.loginRegister;
 
 import java.io.Serializable;
 

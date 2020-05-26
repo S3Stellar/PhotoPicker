@@ -1,4 +1,4 @@
-package com.naorfarag.exercise1naorjonathan.Search;
+package com.naorfarag.exercise1naorjonathan.search;
 
 import android.view.LayoutInflater;
 import android.view.View;

@@ -1,4 +1,4 @@
-package com.naorfarag.exercise1naorjonathan.LoginRegister;
+package com.naorfarag.exercise1naorjonathan.loginRegister;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -35,7 +35,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.naorfarag.exercise1naorjonathan.R;
-import com.naorfarag.exercise1naorjonathan.Search.SearchActivity;
+import com.naorfarag.exercise1naorjonathan.search.SearchActivity;
 import com.naorfarag.exercise1naorjonathan.utility.Validation;
 
 import java.io.IOException;

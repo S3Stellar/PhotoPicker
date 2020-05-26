@@ -16,6 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".search.SearchActivity">
+
+        </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -27,6 +30,15 @@
                 android:resource="@xml/paths" />
         </provider>
 
+        <activity android:name=".loginRegister.DetailsActivity" />
+        <activity android:name=".loginRegister.RegActivity" />
+        <activity android:name=".loginRegister.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
