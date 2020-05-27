@@ -16,9 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".search.SearchActivity">
-
-        </activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDFt67D7X_cKYZks3ZZkbGqaEqkXAOpsew"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -30,6 +30,9 @@
                 android:resource="@xml/paths" />
         </provider>
 
+        <activity android:name=".search.SearchActivity"
+            android:windowSoftInputMode="adjustNothing" />
+
         <activity android:name=".loginRegister.DetailsActivity" />
         <activity android:name=".loginRegister.RegActivity" />
         <activity android:name=".loginRegister.LoginActivity">
@@ -38,6 +41,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
     </application>
 

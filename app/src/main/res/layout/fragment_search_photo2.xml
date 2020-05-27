@@ -6,14 +6,36 @@
     tools:context=".search.SearchPhoto"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/searchBar"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="What would you like to search ?"
-        android:padding="10dp"/>
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+        <EditText
+            android:id="@+id/searchBar"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:hint="What would you like to search ?"
+            android:inputType="textPersonName"
+            android:padding="10dp"
+            android:layout_width="0dp"
+            android:layout_weight="9"/>
+        <Button
+            android:id="@+id/uploadButt"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:text="UPLOAD"
+            android:background="@drawable/uploadshape"/>
+
+    </LinearLayout>
+
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"

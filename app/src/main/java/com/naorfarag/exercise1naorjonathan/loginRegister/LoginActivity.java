@@ -56,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
             boolean validEmail, validPassword;
             validEmail = Validation.isValidEmail(email.getText().toString());
             validPassword = Validation.isValidPassword(pass.getText().toString());
+
             if (validEmail && validPassword) {
                 mAuth.signInWithEmailAndPassword(email.getText().toString().toLowerCase(), pass.getText().toString()).addOnSuccessListener(authResult -> {
                     Intent intent = new Intent(ctx, SearchActivity.class);
@@ -96,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // Go to details activity
         if (currentUser != null) {
-            Log.d("TAG", "onStart: Starting DetailsAct");
+            Log.d("TAG", "onStart: Starting SearchActivity");
             finish();
             startActivity(new Intent(this, SearchActivity.class).putExtra("email", currentUser.getEmail()).
                     putExtra(getString(R.string.intent_byReg), false));

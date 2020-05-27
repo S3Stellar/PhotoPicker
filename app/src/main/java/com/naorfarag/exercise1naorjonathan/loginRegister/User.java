@@ -8,8 +8,8 @@ public class User implements Serializable {
     private String password;
     private String phone;
     private int age;
-    public User() {
 
+    public User() {
     }
 
     public User(String email, String password, String phone, int age) {
