@@ -1,10 +1,13 @@
 package com.naorfarag.exercise1naorjonathan.search;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,6 +35,7 @@ public class DetailsPhoto extends Fragment {
     private TextView photoDetails;
     private TextView comment;
     private Button favoriteButt;
+    private int countNumOfClicks = 0;
 
     private FirebaseFirestore db;
 
@@ -70,11 +74,24 @@ public class DetailsPhoto extends Fragment {
     }
 
     private void favoriteButtListener() {
+        final Animation shakeAnim = AnimationUtils.loadAnimation(getContext(), R.anim.shake);
         favoriteButt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                countNumOfClicks++;
                 addPictureToFavorites();
                 Toast.makeText(getActivity(), "Clicked", Toast.LENGTH_SHORT).show();
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (countNumOfClicks == 2) {
+                            v.startAnimation(shakeAnim);
+                        }
+                        countNumOfClicks = 0;
+                    }
+                }, 500);
             }
         });
     }

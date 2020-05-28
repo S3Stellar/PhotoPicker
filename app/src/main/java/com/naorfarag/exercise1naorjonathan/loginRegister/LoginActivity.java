@@ -24,7 +24,6 @@ import com.naorfarag.exercise1naorjonathan.utility.Validation;
 
 public class LoginActivity extends AppCompatActivity {
 
-
     private FirebaseAuth mAuth;
     private Button signUpButt;
     private Button loginButt;

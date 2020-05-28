@@ -11,7 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.naorfarag.exercise1naorjonathan.R;
 
 import java.util.Objects;
-//melany
+
 public class SearchActivity extends AppCompatActivity {
     private SearchPhoto searchPhoto;
     private FragmentManager fragmentManager;
@@ -24,7 +24,6 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search_container);
         email = getIntent().getStringExtra(getString(R.string.intent_email));
 
-        Log.i("MAIL", email);
         searchPhoto = new SearchPhoto();
 
         fragmentManager = getSupportFragmentManager();
