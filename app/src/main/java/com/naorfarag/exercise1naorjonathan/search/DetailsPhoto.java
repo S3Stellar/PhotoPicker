@@ -128,25 +128,4 @@ public class DetailsPhoto extends Fragment {
            Log.i("ADD", "SUCCESS");
        });
     }
-
-    /*private void uploadFile() {
-        Glide.with(this)
-                .asBitmap()
-                .load(photo.getUrls().getSmall())
-                .into(new CustomTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        if (photo.getUrls().getSmall() != null) {
-                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            resource.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                            byte[] data = baos.toByteArray();
-                            UploadTask uploadTask = storage.getReference().child("photo").child(UUID.randomUUID().toString()).putBytes(data);
-                            uploadTask.addOnFailureListener(exception -> {
-                            }).addOnSuccessListener(taskSnapshot -> { });
-                        }
-                    }
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {}});
-    }
-    */
 }

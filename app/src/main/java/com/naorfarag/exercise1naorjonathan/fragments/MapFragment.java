@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -21,9 +20,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.UploadTask;
 import com.naorfarag.exercise1naorjonathan.R;
@@ -55,6 +52,12 @@ public class MapFragment extends Fragment {
             MapsInitializer.initialize(getActivity().getApplicationContext());
         }
 
+        getMapAsync();
+        uploadButtonListener();
+        return view;
+    }
+
+    private void getMapAsync() {
         // Set google maps
         mMapView.getMapAsync(mMap -> {
             googleMaps = mMap;
@@ -68,7 +71,9 @@ public class MapFragment extends Fragment {
                 googleMaps.animateCamera(CameraUpdateFactory.zoomTo(14), 2000, null);
             });
         });
+    }
 
+    private void uploadButtonListener() {
         uploadButt.setOnClickListener(v -> {
             getLocation();
             Bundle bundle = getArguments();
@@ -87,7 +92,6 @@ public class MapFragment extends Fragment {
                 }).addOnSuccessListener(taskSnapshot -> { });
             }
         });
-        return view;
     }
 
     private void requestPermission() {

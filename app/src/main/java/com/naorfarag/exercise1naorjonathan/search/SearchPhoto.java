@@ -61,6 +61,7 @@ public class SearchPhoto extends Fragment implements PhotoRecyclerAdapter.OnImag
             uploadButt = view.findViewById(R.id.uploadButt);
             searchBar = view.findViewById(R.id.searchBar);
             recyclerView = view.findViewById(R.id.recycleView);
+            BounceView.addAnimTo(uploadButt);
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
             adapter = new PhotoRecyclerAdapter(this);
             recyclerView.setAdapter(adapter);

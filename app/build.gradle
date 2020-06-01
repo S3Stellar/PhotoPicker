@@ -71,4 +71,5 @@ dependencies {
 
     // Bouncer
     implementation 'hari.bounceview:bounceview:0.1.0'
+    implementation 'com.android.support:design:29.0.0'
 }
